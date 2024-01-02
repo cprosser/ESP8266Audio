@@ -21,6 +21,7 @@
 #include <Arduino.h>
 #ifdef ESP32
   #include "driver/i2s.h"
+  #include "esp_chip_info.h"
 #elif defined(ARDUINO_ARCH_RP2040) || ARDUINO_ESP8266_MAJOR >= 3
   #include <I2S.h>
 #elif ARDUINO_ESP8266_MAJOR < 3
@@ -259,7 +260,7 @@ bool AudioOutputI2S::begin(bool txDAC)
           .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1, // lowest interrupt priority
           .dma_buf_count = dma_buf_count,
           .dma_buf_len = 128,
-          .use_apll = use_apll, // Use audio PLL
+          .use_apll = use_apll == APLL_ENABLE, // Use audio PLL
           .tx_desc_auto_clear = true, // Silence on underflow
           .fixed_mclk = use_mclk, // Unused
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(4, 4, 0)
